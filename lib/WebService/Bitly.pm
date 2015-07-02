@@ -17,6 +17,7 @@ use WebService::Bitly::Result::HTTPError;
 use base qw(Class::Accessor::Fast);
 
 __PACKAGE__->mk_accessors(qw(
+    access_token
     user_name
     user_api_key
     end_user_name
@@ -30,7 +31,7 @@ __PACKAGE__->mk_accessors(qw(
 
 sub new {
     my ($class, %args) = @_;
-    if (!defined $args{user_name} || !defined $args{user_api_key}) {
+    if (!defined $args{access_token} && !(defined $args{user_name} && defined $args{user_api_key})) {
         croak("user_name and user_api_key are both required parameters.\n");
     }
 
@@ -216,9 +217,13 @@ sub info {
 sub _do_request {
     my ($self, $url, $result_class) = @_;
 
-    $url->query_param(login    => $self->user_name);
-    $url->query_param(apiKey   => $self->user_api_key);
-    $url->query_param(format   => 'json');
+    if ($self->access_token) {
+        $url->query_param(access_token => $self->access_token);
+    } else {
+        $url->query_param(login  => $self->user_name);
+        $url->query_param(apiKey => $self->user_api_key);
+    }
+    $url->query_param(format => 'json');
 
     my $response = $self->ua->get($url);
 
