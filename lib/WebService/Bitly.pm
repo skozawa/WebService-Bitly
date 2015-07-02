@@ -40,7 +40,7 @@ sub new {
         env_proxy => 1,
         timeout   => 30,
     );
-    $args{base_url} ||= 'http://api.bit.ly/';
+    $args{base_url} ||= 'https://api-ssl.bitly.com/';
 
     return $class->SUPER::new(\%args);
 }

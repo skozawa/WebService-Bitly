@@ -31,7 +31,7 @@ sub _mock_response {
     my $datafile = file(__FILE__)->dir->subdir('../../../../../data')->subdir($dir_name)->file($base_name);
 
     my $response = HTTP::Response->new;
-    if ($uri->host eq 'api.bit.ly') {
+    if ($uri->host eq 'api-ssl.bitly.com') {
         $response->code(200);
         $response->message('OK');
     }
